@@ -1,0 +1,15 @@
+# Core — OpenAI Agents SDK
+openai>=1.0.0
+openai-agents>=0.1.0
+
+# MCP (Model Context Protocol)
+mcp>=1.0.0
+
+# Data models & validation
+pydantic>=2.0.0
+
+# Token counting for prompt budget management
+tiktoken
+
+# Image processing (used by Photographer sub-agent for screenshot analysis)
+Pillow

@@ -1,0 +1,52 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual environments
+venv/
+env/
+ENV/
+.env
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Project specific
+*.pyc
+
+# Generated assets (keep directory structure via .gitkeep)
+asset/generated_audio/*
+!asset/generated_audio/.gitkeep
+asset/generated_face_expression/*
+!asset/generated_face_expression/.gitkeep
+asset/asset_log.jsonl
+
+# Runtime data
+data/*
+!data/.gitkeep
+
+# Temporary files
+tmp/
+tmp_log.txt
+*.pid
+
+# Chainlit
+.chainlit/
+
+# Internal docs (not for public release)
+doc/cutscene_copilot_custom/
+doc/misc/
+doc/opensource_release_plan.md
+
+# Symlinks to other repos
+cutscene_copilot
