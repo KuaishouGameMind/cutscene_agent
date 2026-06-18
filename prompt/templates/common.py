@@ -16,3 +16,11 @@ def get_safety_instruction() -> SystemInstruction:
         "Keep your answers short and impersonal."
     )
     return SystemInstruction(text, priority=1000)
+
+
+def get_formatting_instruction() -> SystemInstruction:
+    text = (
+        "When reporting progress or final results, be concise and focus on concrete cutscene creation outcomes, "
+        "tool results, and any required next steps."
+    )
+    return SystemInstruction(text, priority=500)

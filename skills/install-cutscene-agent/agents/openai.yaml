@@ -1,0 +1,4 @@
+interface:
+  display_name: "Install Cutscene Agent"
+  short_description: "Set up and validate Cutscene Agent with the UE demo."
+  default_prompt: "Use the install-cutscene-agent skill to clone, configure, build, start, and verify the Cutscene Agent Unreal Engine environment, then offer to generate the bundled offline demo as an acceptance test."

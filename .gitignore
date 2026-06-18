@@ -47,6 +47,23 @@ tmp_log.txt
 doc/cutscene_copilot_custom/
 doc/misc/
 doc/opensource_release_plan.md
+docs/demo_run_notes.md
 
 # Symlinks to other repos
 cutscene_copilot
+
+# Unreal Engine demo: generated and machine-local files
+demo/UE_CSAgent_demo/.vs/
+demo/UE_CSAgent_demo/Binaries/
+demo/UE_CSAgent_demo/DerivedDataCache/
+demo/UE_CSAgent_demo/Intermediate/
+demo/UE_CSAgent_demo/Saved/
+demo/UE_CSAgent_demo/*.sln
+demo/UE_CSAgent_demo/*.VC.db
+demo/UE_CSAgent_demo/*.VC.opendb
+
+# CutsceneProvider is installed by the setup skill, not vendored in the demo.
+demo/UE_CSAgent_demo/Plugins/CutsceneProvider/
+
+# Runtime-generated assets are not part of the bundled offline demo.
+demo/UE_CSAgent_demo/Content/CutsceneProvider/Dynamic/
