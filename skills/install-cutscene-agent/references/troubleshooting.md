@@ -1,5 +1,40 @@
 # Troubleshooting
 
+## Unreal Engine Was Not Detected
+
+Run the prerequisite checker with an explicit UE root:
+
+```powershell
+& "skills\install-cutscene-agent\scripts\check_windows_prerequisites.ps1" `
+  -ProjectFile "demo\UE_CSAgent_demo\UE_CSAgent_demo.uproject" `
+  -UnrealEnginePath "D:\Epic Games\UE_5.6"
+```
+
+The root must contain:
+
+```text
+Engine/Binaries/Win64/UnrealEditor.exe
+Engine/Build/BatchFiles/Build.bat
+```
+
+If those files do not exist, ask the user to install the required engine
+version or provide the correct root. Do not continue to build or MCP setup.
+
+## Visual Studio Toolchain Was Not Detected
+
+Open Visual Studio Installer and install or modify Visual Studio 2022 with:
+
+- `Game development with C++`
+- MSVC v143 C++ x64/x86 build tools
+- Windows 10 SDK or Windows 11 SDK
+- `Visual Studio Tools for Unreal Engine` (recommended)
+
+Rerun the prerequisite checker afterward. Finding Visual Studio alone is not
+enough; MSBuild, `Hostx64\x64\cl.exe`, and `Windows.h` must also be present.
+
+Do not treat `-SkipBuildToolchainCheck` as a repair. It is valid only when
+matching precompiled editor binaries were explicitly verified.
+
 ## Missing Or Out-Of-Date Module
 
 If UE reports that `CutsceneProviderEditor` is missing or built for another

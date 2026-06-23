@@ -1,6 +1,6 @@
 ---
 name: install-cutscene-agent
-description: Set up and verify the Cutscene Agent ecosystem for an Unreal Engine project. Use when an agent needs to clone cutscene_agent and CutsceneProvider, install Python dependencies, enable and build the UE plugin, configure MCP clients or the Python CLI, open the demo sequence, start the MCP server, diagnose setup failures, and offer to generate the bundled offline demo as an end-to-end acceptance test.
+description: Set up and verify the Cutscene Agent ecosystem for an Unreal Engine project. Use when an agent needs to detect missing Unreal Engine or Visual Studio C++ prerequisites, clone cutscene_agent and CutsceneProvider, install Python dependencies, enable and build the UE plugin, configure MCP clients or the Python CLI, open the demo sequence, start the MCP server, diagnose setup failures, and offer to generate the bundled offline demo as an end-to-end acceptance test.
 ---
 
 # Install Cutscene Agent
@@ -10,6 +10,9 @@ Engine Level Sequence through CutsceneProvider MCP.
 
 Read [setup.md](references/setup.md) for verified Windows and UE 5.6 commands.
 Read [troubleshooting.md](references/troubleshooting.md) only when a step fails.
+On Windows, run
+[`scripts/check_windows_prerequisites.ps1`](scripts/check_windows_prerequisites.ps1)
+before installing or building the plugin.
 
 ## Required Outcome
 
@@ -24,39 +27,73 @@ Do not report setup as complete until all of these are true:
    `demo/UE_CSAgent_demo/Setup/CutsceneAssets.xlsx` to
    `<UEProject>/Plugins/CutsceneProvider/Content/Data/CutsceneAssets.xlsx`.
 5. `PythonScriptPlugin`, `ControlRig`, and `CutsceneProvider` are enabled.
-6. The UE editor target builds successfully when compilation is required.
-7. The CutsceneProvider panel starts the server at
+6. Unreal Engine and the required native build toolchain pass preflight.
+7. The UE editor target builds successfully when compilation is required.
+8. The CutsceneProvider panel starts the server at
    `http://localhost:8100/mcp`.
-8. MCP initialization and `list_tools` succeed.
-9. A Level Sequence is open and `get_sequence_content` returns JSON.
-10. For the official demo, character, animation, and audio queries return the
+9. MCP initialization and `list_tools` succeed.
+10. A Level Sequence is open and `get_sequence_content` returns JSON.
+11. For the official demo, character, animation, and audio queries return the
    bundled demo identifiers.
 
 ## Workflow
 
 1. Inspect the host OS, Python version, Unreal Engine version, project path,
    Git LFS availability, and existing repository paths.
-2. Clone only missing repositories. Keep the plugin folder name exactly
+2. On Windows, run the prerequisite checker against the selected `.uproject`.
+   If UE or the native toolchain is missing, stop and use the standard
+   messages in **Missing Prerequisites**. Do not continue to build, launch,
+   MCP, or demo validation.
+3. Clone only missing repositories. Keep the plugin folder name exactly
    `CutsceneProvider`.
-3. Install `cutscene_agent/requirements.txt` in an isolated Python
+4. Install `cutscene_agent/requirements.txt` in an isolated Python
    environment when possible.
-4. Use `cutscene_agent/demo/UE_CSAgent_demo` as the default project. Do not
+5. Use `cutscene_agent/demo/UE_CSAgent_demo` as the default project. Do not
    copy or regenerate ignored UE cache directories.
-5. Install or link CutsceneProvider into the UE project's `Plugins` folder.
-6. Copy the bundled `CutsceneAssets.xlsx` into the installed plugin's
+6. Install or link CutsceneProvider into the UE project's `Plugins` folder.
+7. Copy the bundled `CutsceneAssets.xlsx` into the installed plugin's
    `Content/Data` directory.
-7. Enable required plugins in the `.uproject`.
-8. Build the editor target with UnrealBuildTool if the plugin has no
+8. Enable required plugins in the `.uproject`.
+9. Build the editor target with UnrealBuildTool if the plugin has no
    compatible binaries.
-9. Open the UE project and wait for plugin Python dependencies to install.
-10. Open `Tools -> Cutscene Tools -> Open Cutscene Panel`, select/open the
+10. Open the UE project and wait for plugin Python dependencies to install.
+11. Open `Tools -> Cutscene Tools -> Open Cutscene Panel`, select/open the
    working sequence, and click `Start`.
-11. Verify port `8100` and the MCP protocol. A plain HTTP response saying
+12. Verify port `8100` and the MCP protocol. A plain HTTP response saying
    `Not Acceptable: Client must accept text/event-stream` still proves that
    the endpoint is responding.
-12. Verify sequence and asset readiness with read-only MCP calls.
-13. Ask the user whether to generate the bundled demo as an end-to-end
+13. Verify sequence and asset readiness with read-only MCP calls.
+14. Ask the user whether to generate the bundled demo as an end-to-end
     validation. If accepted, run the post-setup demo procedure below.
+
+## Missing Prerequisites
+
+Treat missing UE or build tools as a resumable setup blocker, not as a
+completed setup and not as a generic build failure.
+
+If Unreal Engine is missing, say:
+
+> Unreal Engine `<required-version>` was not detected. Install that version
+> with Epic Games Launcher, or provide an existing UE installation path. The
+> directory must contain `Engine/Binaries/Win64/UnrealEditor.exe` and
+> `Engine/Build/BatchFiles/Build.bat`. After installation, I will rerun the
+> preflight check and continue from this step.
+
+If the Windows C++ toolchain is missing or incomplete, say:
+
+> Unreal Engine was detected, but the UE C++ build toolchain is incomplete.
+> Install Visual Studio 2022 17.8 or newer and enable `Game development with
+> C++`, MSVC v143 x64/x86 build tools, and a Windows 10 or Windows 11 SDK.
+> `Visual Studio Tools for Unreal Engine` is recommended. After installation,
+> I will rerun the preflight check and continue.
+
+List the exact missing items returned by the script. Do not attempt to install
+UE or Visual Studio silently. Do not proceed to the post-setup demo until
+preflight and the real `Build.bat` invocation both succeed.
+
+Only use `-SkipBuildToolchainCheck` when compatible prebuilt editor binaries
+have been explicitly verified for the exact UE version and platform. Never
+use it merely to bypass a failed check for the bundled source-based demo.
 
 ## Post-Setup Demo Validation
 
@@ -115,6 +152,8 @@ that merely creating a `.env` file loads it.
 - Do not delete `Binaries`, `Intermediate`, generated assets, or registry
   files unless the user explicitly requests cleanup.
 - Close Unreal Editor before rebuilding editor modules.
+- Do not modify the user's global Visual Studio or Unreal Engine
+  installation. Detect and report prerequisites before requesting installs.
 - Prefer a directory junction or symlink during local plugin development;
   copy or submodule installation is more appropriate for distribution.
 - Never copy or commit UE-generated `Binaries`, `Intermediate`, `Saved`,

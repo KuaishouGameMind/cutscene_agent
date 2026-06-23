@@ -48,6 +48,49 @@ Saved
 Do not recreate or commit them as part of setup. Unreal Engine and
 UnrealBuildTool regenerate them locally.
 
+## Windows Prerequisite Check
+
+Run the bundled preflight script before plugin installation or compilation:
+
+```powershell
+& "<cutscene_agent>\skills\install-cutscene-agent\scripts\check_windows_prerequisites.ps1" `
+  -ProjectFile "<cutscene_agent>\demo\UE_CSAgent_demo\UE_CSAgent_demo.uproject"
+```
+
+For a custom or source-built UE installation that is not registered:
+
+```powershell
+& "<cutscene_agent>\skills\install-cutscene-agent\scripts\check_windows_prerequisites.ps1" `
+  -ProjectFile "<UEProject>\<ProjectName>.uproject" `
+  -UnrealEnginePath "<UE root>"
+```
+
+The script outputs JSON and exits with:
+
+- `0`: project, UE, and native build toolchain are ready.
+- `2`: one or more prerequisites are missing.
+
+It checks:
+
+- the `.uproject` and its `EngineAssociation`
+- Epic Launcher and UnrealVersionSelector registry entries
+- explicit custom UE paths
+- `UnrealEditor.exe`
+- `Build.bat`
+- Visual Studio 2022 version 17.8 or newer
+- `Game development with C++`
+- MSBuild
+- MSVC x64 compiler
+- Windows 10 or Windows 11 SDK
+
+Do not continue setup when `Ready` is `false`. Show `Missing` and
+`SuggestedActions` to the user, wait for installation or a corrected path,
+then rerun the same command.
+
+`-SkipBuildToolchainCheck` is reserved for a project with compatible
+precompiled editor binaries that were independently verified. Do not use it
+for the bundled demo.
+
 ## Python
 
 Use Python 3.10 or newer:
