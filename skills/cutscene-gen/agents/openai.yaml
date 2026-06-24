@@ -1,0 +1,4 @@
+interface:
+  display_name: "Cutscene Gen"
+  short_description: "Create UE cutscenes through CutsceneProvider MCP tools."
+  default_prompt: "Use the cutscene-gen skill to turn my script or natural-language direction into MCP tool calls that modify the active Unreal Engine Level Sequence."
