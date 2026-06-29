@@ -88,6 +88,12 @@ For the bundled demo, query results should expose:
 - `demo_standing_greeting`
 - `demo_sample_audio`
 
+For a custom project with an empty table, ask the user for asset paths and
+append rows using the schema in `setup.md`. Character registration usually
+expects a Blueprint class path, not a raw SkeletalMesh path. If rows exist but
+queries stay empty, restart the CutsceneProvider panel/server and recheck that
+the UE assets are saved and use compatible loaders.
+
 ## CLI Ignores `.env`
 
 The current `main.py` reads `os.getenv` directly. Export variables into the
