@@ -32,8 +32,10 @@ Do not report setup as complete until all of these are true:
 8. The CutsceneProvider panel starts the server at
    `http://localhost:8100/mcp`.
 9. MCP initialization and `list_tools` succeed.
-10. A Level Sequence is open and `get_sequence_content` returns JSON.
-11. For the official demo, character, animation, and audio queries return the
+10. The asset table exists and is either non-empty or the user has been asked
+    to provide asset paths for registration.
+11. A Level Sequence is open and `get_sequence_content` returns JSON.
+12. For the official demo, character, animation, and audio queries return the
    bundled demo identifiers.
 
 ## Workflow
@@ -62,8 +64,12 @@ Do not report setup as complete until all of these are true:
 12. Verify port `8100` and the MCP protocol. A plain HTTP response saying
    `Not Acceptable: Client must accept text/event-stream` still proves that
    the endpoint is responding.
-13. Verify sequence and asset readiness with read-only MCP calls.
-14. Ask the user whether to generate the bundled demo as an end-to-end
+13. Check asset table readiness. For the bundled demo, the copied table should
+    already contain demo rows. For a custom project with an empty table, ask
+    the user for character Blueprint, animation, and audio asset paths before
+    cutscene generation.
+14. Verify sequence and asset readiness with read-only MCP calls.
+15. Ask the user whether to generate the bundled demo as an end-to-end
     validation. If accepted, run the post-setup demo procedure below.
 
 ## Missing Prerequisites

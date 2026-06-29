@@ -144,6 +144,48 @@ This step is mandatory for the bundled demo identifiers. The table is kept
 in the demo project because CutsceneProvider is a companion repository and
 is not vendored into this repository.
 
+## Asset Table Readiness
+
+After copying `CutsceneAssets.xlsx`, inspect whether it contains data rows
+below the four header rows.
+
+- For the bundled demo, the table is expected to contain
+  `demo_mannequin`, `demo_standing_greeting`, and `demo_sample_audio`.
+- For a custom UE project, an empty table is allowed at setup time, but do not
+  proceed to character, animation, or audio generation until assets are
+  registered.
+
+If the selected project's table is empty, ask the user for the UE object paths
+they want to expose to the agent:
+
+```text
+Character Blueprint class path: /Game/Characters/BP_Hero
+Animation asset path: /Game/Animations/StandingGreeting
+Audio SoundWave path: /Game/Audio/Line01
+```
+
+Register them by adding rows to the matching sheets without deleting existing
+rows. Use stable lowercase identifiers such as `hero_character`,
+`hero_greeting`, and `line_01_audio`.
+
+Required sheet shapes:
+
+- `Characters`: `id`, `loader_type`, `name`, `gender`, `description`,
+  `class_path`
+- `Animations`: `id`, `loader_type`, `name`, `category`, `duration`,
+  `description`, `asset_path`
+- `Audio`: `id`, `loader_type`, `name`, `duration`, `description`,
+  `asset_path`
+
+Use these loader values unless the project has a different registered loader:
+
+- character rows: `metahuman_character`
+- animation rows: `metahuman_anim`
+- audio rows: `audio`
+
+After editing the table, restart the CutsceneProvider server or reopen the
+panel, then verify with MCP asset queries before using the identifiers.
+
 Enable these plugins in the `.uproject`:
 
 ```json
